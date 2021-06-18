@@ -12,4 +12,4 @@
 </em>
 </p>
 
-<p>Feel free to leave feedback on how to improve the project further, thanks!</p>
+<p>Feel free to leave feedback on how to improve the project further. Thanks!</p>
