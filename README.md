@@ -1,5 +1,5 @@
 # eMedical-Certificates
-<h3><em>A concept of developing an alternative solution, to existing medical certificate recording keeping systems, using blockchain technology.</em></h3>
+<h3><em>A concept of developing an alternative solution, to existing medical certificate record keeping systems, using blockchain technology.</em></h3>
 <p>Healthcare documents today are shared across multiple organizations to have a complete medical history of a patient.
 <br>As a result, it is very crucial that this sort of data not be mishandled due to the nature of sensitivity and the consequences an error could potentially cost. Unfortunately, the current systems can be prone to human error, mishandles and even prone to being attacked.
 <br>
