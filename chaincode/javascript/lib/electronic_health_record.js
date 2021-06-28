@@ -71,7 +71,7 @@ class ElectronicHealthRecord extends Contract {
         console.info('END updateAuthorization');
     }
 
-    async createRecord(ctx, patientID, operatorID, recordData: string) {
+    async createRecord(ctx, patientID, operatorID, recordData) {
         console.info('START: createRecord');
         const profile = await self.isProfileExist(ctx, patientID);
         self.isAuthorized(profile, patientID, operatorID);
@@ -81,7 +81,7 @@ class ElectronicHealthRecord extends Contract {
         return profile['records'].length;
     }
 
-    async updateRecordByID(ctx, patientID, operatorID, recordID, newRecordData: string) {
+    async updateRecordByID(ctx, patientID, operatorID, recordID, newRecordData) {
         console.info('START: updateRecordByID');
         const profile = await self.isProfileExist(ctx, patientID);
         if (profile['records'].length < recordID) {
@@ -93,10 +93,11 @@ class ElectronicHealthRecord extends Contract {
     }
 
     async updatePersonalData(ctx, patientID, newName, newAddress) {
-        console.info('START: udpatePersonalData');
+        console.info('START: updatePersonalData');
         const profile = await self.isProfileExist(ctx, patientID);
         profile.name = newName;
         profile.address = newAddress;
+        console.info('END: updatePersonalData');
     }
 }
 
