@@ -1,4 +1,5 @@
 const url = require('url');
+const cors = require('cors');
 const { Gateway, Wallets } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
@@ -29,7 +30,7 @@ router.get('/', async function(req, res) {
     res.render('homepage', {title: 'Patients'});
 });
 
-router.post('/createProfile', async function(req, res) {
+router.post('/createProfile', cors(), async function(req, res) {
     let params = new URLSearchParams(url.parse(req.url).query);
     const patientID = params.get('id');
     const name = params.get('name');
@@ -41,7 +42,7 @@ router.post('/createProfile', async function(req, res) {
     res.json({'success': true, 'data': {}});
 });
 
-router.get('/updatePersonalData', async function(req, res) {
+router.get('/updatePersonalData', cors(), async function(req, res) {
     let params = new URLSearchParams(url.parse(req.url).query);
     const patientID = params.get('id');
     const newName = params.get('newName');
@@ -52,20 +53,20 @@ router.get('/updatePersonalData', async function(req, res) {
     res.json({'success': true, 'data': {}});
 });
 
-router.get('/getRecordByID', async function(req, res) {
+router.get('/getRecordByID', cors(), async function(req, res) {
     let params = new URLSearchParams(url.parse(req.url).query);
     const patientID = params.get('id');
     const recordID = params.get('record-id');
-    const result = await contract.submitTransaction('getRecordByID', patientID, patientID, recordID);
+    const result = await contract.evaluateTransaction('getRecordByID', patientID, patientID, recordID);
     console.log(`Got record with recordID=${recordID}`);
     res.status(200);
     res.json({'success': true, 'data': JSON.parse(result.toString())});
 });
 
-router.get('/getAllRecord', async function(req, res) {
+router.get('/getAllRecord', cors(), async function(req, res) {
     let params = new URLSearchParams(url.parse(req.url).query);
     const patientID = params.get('id');
-    const result = await contract.submitTransaction('getAllRecord', patientID, patientID);
+    const result = await contract.evaluateTransaction('getAllRecord', patientID, patientID);
     console.log(`Got all record for ${patientID}`);
     res.status(200);
     res.json({'success': true, 'data': JSON.parse(result.toString())});
