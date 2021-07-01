@@ -26,50 +26,72 @@ async function init(channelName) {
 
 /* GET home page. */
 router.get('/', async function(req, res) {
-    gateway, contract = await init('myChannel');
-    res.render('homepage', {title: 'Patients'});
+    const channelName = req.params.channelName;
+    gateway, contract = await init(channelName);
+    res.render('homepage', {title: 'Patients', channel: channelName});
 });
 
+
 router.post('/createProfile', cors(), async function(req, res) {
-    let params = new URLSearchParams(url.parse(req.url).query);
-    const patientID = params.get('id');
-    const name = params.get('name');
-    const birthDate = params.get('birth-date');
-    const address = params.get('address');
-    await contract.submitTransaction('createProfile', patientID, name, birthDate, address);
-    console.log(`Profile for ${patientID} has been created`);
-    res.status(200);
-    res.json({'success': true, 'data': {}});
+    try {
+        let params = new URLSearchParams(url.parse(req.url).query);
+        const patientID = params.get('id');
+        const name = params.get('name');
+        const birthDate = params.get('birth-date');
+        const address = params.get('address');
+        await contract.submitTransaction('createProfile', patientID, name, birthDate, address);
+        console.log(`Profile for ${patientID} has been created`);
+        res.status(200);
+        res.json({'success': true, 'data': ''});
+    } catch (error) {
+        res.status(400);
+        res.json({'success': false, 'data': `${error}`});
+    };
 });
 
 router.get('/updatePersonalData', cors(), async function(req, res) {
-    let params = new URLSearchParams(url.parse(req.url).query);
-    const patientID = params.get('id');
-    const newName = params.get('newName');
-    const newAddress = params.get('mew-address');
-    await contract.submitTransaction('updatePersonalData', patientID, newName, newAddress);
-    console.log(`Updated data for ${patientID}`);
-    res.status(200);
-    res.json({'success': true, 'data': {}});
+    try {
+        let params = new URLSearchParams(url.parse(req.url).query);
+        const patientID = params.get('id');
+        const newName = params.get('newName');
+        const newAddress = params.get('mew-address');
+        await contract.submitTransaction('updatePersonalData', patientID, newName, newAddress);
+        console.log(`Updated data for ${patientID}`);
+        res.status(200);
+        res.json({'success': true, 'data': {}});
+    } catch (error) {
+        res.status(400);
+        res.json({'success': false, 'data': `${error}`});
+    };
 });
 
 router.get('/getRecordByID', cors(), async function(req, res) {
-    let params = new URLSearchParams(url.parse(req.url).query);
-    const patientID = params.get('id');
-    const recordID = params.get('record-id');
-    const result = await contract.evaluateTransaction('getRecordByID', patientID, patientID, recordID);
-    console.log(`Got record with recordID=${recordID}`);
-    res.status(200);
-    res.json({'success': true, 'data': JSON.parse(result.toString())});
+    try {
+        let params = new URLSearchParams(url.parse(req.url).query);
+        const patientID = params.get('id');
+        const recordID = params.get('record-id');
+        const result = await contract.evaluateTransaction('getRecordByID', patientID, patientID, recordID);
+        console.log(`Got record with recordID=${recordID}`);
+        res.status(200);
+        res.json({'success': true, 'data': JSON.parse(result.toString())});
+    } catch (error) {
+        res.status(400);
+        res.json({'success': false, 'data': `${error}`});
+    };
 });
 
 router.get('/getAllRecord', cors(), async function(req, res) {
-    let params = new URLSearchParams(url.parse(req.url).query);
-    const patientID = params.get('id');
-    const result = await contract.evaluateTransaction('getAllRecord', patientID, patientID);
-    console.log(`Got all record for ${patientID}`);
-    res.status(200);
-    res.json({'success': true, 'data': JSON.parse(result.toString())});
+    try {
+        let params = new URLSearchParams(url.parse(req.url).query);
+        const patientID = params.get('id');
+        const result = await contract.evaluateTransaction('getAllRecord', patientID, patientID);
+        console.log(`Got all record for ${patientID}`);
+        res.status(200);
+        res.json({'success': true, 'data': JSON.parse(result.toString())});
+    } catch (error) {
+        res.status(400);
+        res.json({'success': false, 'data': `${error}`});
+    };
 })
 
 module.exports = router;
