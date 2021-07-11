@@ -24,16 +24,9 @@ async function init(channelName, userName) {
     return gateway, contract
 }
 
-/* GET home page. */
-router.get('/', async function(req, res) {
-    const channelName = req.params.channelName;
-    const userName = req.params.userName;
-    gateway, contract = await init(channelName, userName);
-    res.render('homepage', {title: 'Patients', channel: channelName});
-});
-
-router.get('/updatePersonalData', cors(), async function(req, res) {
+router.get('/:userName-:channelName/updatePersonalData', cors(), async function(req, res) {
     try {
+        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('id');
         const newName = params.get('newName');
@@ -48,8 +41,9 @@ router.get('/updatePersonalData', cors(), async function(req, res) {
     };
 });
 
-router.get('/getRecordByID', cors(), async function(req, res) {
+router.get('/:userName-:channelName/getRecordByID', cors(), async function(req, res) {
     try {
+        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('id');
         const recordID = params.get('record-id');
@@ -63,8 +57,9 @@ router.get('/getRecordByID', cors(), async function(req, res) {
     };
 });
 
-router.get('/getAllRecord', cors(), async function(req, res) {
+router.get('/:userName-:channelName/getAllRecord', cors(), async function(req, res) {
     try {
+        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('id');
         const result = await contract.evaluateTransaction('getAllRecord', patientID, patientID);
@@ -77,8 +72,9 @@ router.get('/getAllRecord', cors(), async function(req, res) {
     };
 });
 
-router.post('/updateAuthorization', cors(), async function(req, res) {
+router.post('/:userName-:channelName/updateAuthorization', cors(), async function(req, res) {
     try {
+        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const operatorID = params.get('id');
         const patientID = params.get('patient-id');

@@ -24,16 +24,9 @@ async function init(channelName, userName) {
     return gateway, contract
 }
 
-/* GET home page. */
-router.get('/', async function(req, res) {
-    const channelName = req.params.channelName;
-    const userName = req.params.userName;
-    gateway, contract = await init(channelName, userName);
-    res.render('homepage', {title: 'Patients', channel: channelName});
-});
-
-router.post('/updateAuthorization', cors(), async function(req, res) {
+router.post('/:userName-:channelName/updateAuthorization', cors(), async function(req, res) {
     try {
+        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const operatorID = params.get('id');
         const patientID = params.get('patient-id');
@@ -50,8 +43,9 @@ router.post('/updateAuthorization', cors(), async function(req, res) {
     };
 });
 
-router.get('/getAllRecord', cors(), async function(req, res) {
+router.get('/:userName-:channelName/getAllRecord', cors(), async function(req, res) {
     try {
+        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const operatorID = params.get('id');
         const patientID = params.get('patient-id');
@@ -65,8 +59,9 @@ router.get('/getAllRecord', cors(), async function(req, res) {
     };
 })
 
-router.get('/getRecordByID', cors(), async function(req, res) {
+router.get('/:userName-:channelName/getRecordByID', cors(), async function(req, res) {
     try {
+        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('patient-id');
         const operatorID = params.get('id');
@@ -81,8 +76,9 @@ router.get('/getRecordByID', cors(), async function(req, res) {
     };
 });
 
-router.post('/createRecord', cors(), async function(req, res) {
+router.post('/:userName-:channelName/createRecord', cors(), async function(req, res) {
     try {
+        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('patient-id');
         const operatorID = params.get('id');
@@ -97,8 +93,9 @@ router.post('/createRecord', cors(), async function(req, res) {
     }
 });
 
-router.post('/updateRecord', cors(), async function(req, res) {
+router.post('/:userName-:channelName/updateRecord', cors(), async function(req, res) {
     try {
+        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('patient-id');
         const operatorID = params.get('id');

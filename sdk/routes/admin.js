@@ -9,7 +9,7 @@ var express = require('express');
 var router = express.Router();
 var ca;
 
-async function init(channelName) {
+async function init() {
     // load the network configuration
     const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations',
     'org1.example.com', 'connection-org1.json');
@@ -20,26 +20,18 @@ async function init(channelName) {
 
     const walletPath = path.join(process.cwd(), 'wallet');
     const wallet = await Wallets.newFileSystemWallet(walletPath);
-    const identity = await wallet.get('appUser');
+    const identity = await wallet.get('admin');
     const gateway = new Gateway();
-    await gateway.connect(ccp, {wallet, identity: 'appUser', discovery: {enabled: true, asLocalhost: true}});
-    const network = await gateway.getNetwork(channelName);
-    const contract = network.getContract('electronic_health_record');
-    return gateway, contract
-
-    return ca, gateway;
+    await gateway.connect(ccp, {wallet, identity: 'admin', discovery: {enabled: true, asLocalhost: true}});
+    return ca, gateway
 }
-
-/* GET home page. */
-router.get('/', async function(req, res) {
-    let params = new URLSearchParams(url.parse(req.url).query);
-    ca = await init(channelName);
-    res.render('homepage', {title: 'Admin', channel: channelName});
-});
 
 router.post('/createProfile', cors(), async function(req, res) {
     try {
+        let ca, gateway = await init();
         let params = new URLSearchParams(url.parse(req.url).query);
+        const network = await gateway.getNetwork(params.get('channelName'));
+        const contract = network.getContract('electronic_health_record');
         const patientID = params.get('id');
         const name = params.get('name');
         const birthDate = params.get('birth-date');
@@ -56,6 +48,7 @@ router.post('/createProfile', cors(), async function(req, res) {
 
 router.post('/registerUser', cors(), async function(req, res){
     try {
+        let ca, gateway = await init(channelName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const userName = params.get('user-name');
 
@@ -106,8 +99,9 @@ router.post('/registerUser', cors(), async function(req, res){
     }
 });
 
-router.port('/createChannel', cors(), async function(req, res){
+router.post('/createChannel', cors(), async function(req, res){
     try {
+        let ca, gateway = await init(channelName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const channelName = params.get('channel-name');
         const walletPath = path.join(process.cwd(), 'wallet');
