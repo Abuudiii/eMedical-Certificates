@@ -45,7 +45,7 @@ router.post('/updateAuthorization', cors(), async function(req, res) {
         res.json({'success': true, 'data': ''});
 
     } catch (error) {
-        res.status(400);
+        res.status(200);
         res.json({'success': false, data: `${error}`});
     };
 });
@@ -60,7 +60,7 @@ router.get('/getAllRecord', cors(), async function(req, res) {
         res.status(200);
         res.json({'success': true, 'data': JSON.parse(result.toString())});
     } catch (error) {
-        res.status(400);
+        res.status(200);
         res.json({'success': false, 'data': `${error}`});
     };
 })
@@ -76,7 +76,7 @@ router.get('/getRecordByID', cors(), async function(req, res) {
         res.status(200);
         res.json({'success': true, 'data': JSON.parse(result.toString())});
     } catch (error) {
-        res.status(400);
+        res.status(200);
         res.json({'success': false, 'data': `${error}`});
     };
 });
@@ -92,7 +92,7 @@ router.post('/createRecord', cors(), async function(req, res) {
         res.status(200);
         res.json({'success': true, 'data': recordID});
     } catch (error) {
-        res.status(400);
+        res.status(200);
         res.json({'success': false, 'data': `${error}`});
     }
 });
@@ -109,7 +109,7 @@ router.post('/updateRecord', cors(), async function(req, res) {
         res.status(200);
         res.json({'success': true, 'data': ''});
     } catch (error) {
-        res.status(400);
+        res.status(200);
         res.json({'success': false, 'data': `${error}`});
     }
 });

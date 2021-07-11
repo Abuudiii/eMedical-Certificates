@@ -49,7 +49,7 @@ router.post('/createProfile', cors(), async function(req, res) {
         res.status(200);
         res.json({'success': true, 'data': ''});
     } catch (error) {
-        res.status(400);
+        res.status(200);
         res.json({'success': false, 'data': `${error}`});
     };
 });
@@ -101,7 +101,7 @@ router.post('/registerUser', cors(), async function(req, res){
         res.status(200);
         res.json({'success': true, 'data': ''});
     } catch (error) {
-        res.status(400);
+        res.status(200);
         res.json({'success': false, 'data': `${error}`});
     }
 });
@@ -153,7 +153,7 @@ router.port('/createChannel', cors(), async function(req, res){
         res.status(200);
         res.json({'success': true, 'data': `${result}`});
     } catch (error) {
-        res.status(400);
+        res.status(200);
         res.json({'success': false, 'data': `${error}`});
     };
 })
