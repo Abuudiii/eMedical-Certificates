@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+#mainNav {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 5px;
+    background-color: lightgrey;
+    text-align: center;
+}
+
+.currentTab {
+    background-color: lightblue;
+}

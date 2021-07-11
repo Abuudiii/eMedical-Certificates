@@ -1,0 +1,11 @@
+#patientNav {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    padding: 5px;
+    background-color: lightgrey;
+    text-align: center;
+}
+
+.currentTab {
+    background-color: lightblue;
+}
