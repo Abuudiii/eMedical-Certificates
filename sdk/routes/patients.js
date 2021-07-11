@@ -32,24 +32,6 @@ router.get('/', async function(req, res) {
     res.render('homepage', {title: 'Patients', channel: channelName});
 });
 
-
-router.post('/createProfile', cors(), async function(req, res) {
-    try {
-        let params = new URLSearchParams(url.parse(req.url).query);
-        const patientID = params.get('id');
-        const name = params.get('name');
-        const birthDate = params.get('birth-date');
-        const address = params.get('address');
-        await contract.submitTransaction('createProfile', patientID, name, birthDate, address);
-        console.log(`Profile for ${patientID} has been created`);
-        res.status(200);
-        res.json({'success': true, 'data': ''});
-    } catch (error) {
-        res.status(400);
-        res.json({'success': false, 'data': `${error}`});
-    };
-});
-
 router.get('/updatePersonalData', cors(), async function(req, res) {
     try {
         let params = new URLSearchParams(url.parse(req.url).query);
