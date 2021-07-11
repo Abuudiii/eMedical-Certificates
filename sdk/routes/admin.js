@@ -26,7 +26,7 @@ async function init() {
     return ca, gateway
 }
 
-router.post('/createProfile', cors(), async function(req, res) {
+router.get('/createProfile', cors(), async function(req, res) {
     try {
         let ca, gateway = await init();
         let params = new URLSearchParams(url.parse(req.url).query);
@@ -46,7 +46,7 @@ router.post('/createProfile', cors(), async function(req, res) {
     };
 });
 
-router.post('/registerUser', cors(), async function(req, res){
+router.get('/registerUser', cors(), async function(req, res){
     try {
         let ca, gateway = await init(channelName);
         let params = new URLSearchParams(url.parse(req.url).query);
@@ -99,7 +99,7 @@ router.post('/registerUser', cors(), async function(req, res){
     }
 });
 
-router.post('/createChannel', cors(), async function(req, res){
+router.get('/createChannel', cors(), async function(req, res){
     try {
         let ca, gateway = await init(channelName);
         let params = new URLSearchParams(url.parse(req.url).query);
@@ -113,7 +113,6 @@ router.post('/createChannel', cors(), async function(req, res){
             res.json({'success': false, 'reason': 'Missing admin user in the wallet'});
         }
 
-        const gateway = new Gateway();
         await gateway.connect(ccp, {wallet, identity: 'admin', discovery: {enabled: true, asLocalhost: true}});
         var client = gateway.getClient();
 

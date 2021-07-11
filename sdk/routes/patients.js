@@ -29,8 +29,8 @@ router.get('/:userName-:channelName/updatePersonalData', cors(), async function(
         let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('id');
-        const newName = params.get('newName');
-        const newAddress = params.get('mew-address');
+        const newName = params.get('new-name');
+        const newAddress = params.get('new-address');
         await contract.submitTransaction('updatePersonalData', patientID, newName, newAddress);
         console.log(`Updated data for ${patientID}`);
         res.status(200);
@@ -72,7 +72,7 @@ router.get('/:userName-:channelName/getAllRecord', cors(), async function(req, r
     };
 });
 
-router.post('/:userName-:channelName/updateAuthorization', cors(), async function(req, res) {
+router.get('/:userName-:channelName/updateAuthorization', cors(), async function(req, res) {
     try {
         let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);

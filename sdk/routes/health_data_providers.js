@@ -24,7 +24,7 @@ async function init(channelName, userName) {
     return gateway, contract
 }
 
-router.post('/:userName-:channelName/updateAuthorization', cors(), async function(req, res) {
+router.get('/:userName-:channelName/updateAuthorization', cors(), async function(req, res) {
     try {
         let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
@@ -76,7 +76,7 @@ router.get('/:userName-:channelName/getRecordByID', cors(), async function(req, 
     };
 });
 
-router.post('/:userName-:channelName/createRecord', cors(), async function(req, res) {
+router.get('/:userName-:channelName/createRecord', cors(), async function(req, res) {
     try {
         let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
@@ -93,7 +93,7 @@ router.post('/:userName-:channelName/createRecord', cors(), async function(req, 
     }
 });
 
-router.post('/:userName-:channelName/updateRecord', cors(), async function(req, res) {
+router.get('/:userName-:channelName/updateRecord', cors(), async function(req, res) {
     try {
         let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
