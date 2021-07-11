@@ -24,7 +24,15 @@ async function init(channelName, userName) {
     return gateway, contract
 }
 
-router.post('/:userName-:channelName/updateAuthorization', cors(), async function(req, res) {
+/* GET home page. */
+router.get('/', async function(req, res) {
+    const channelName = req.params.channelName;
+    const userName = req.params.userName;
+    gateway, contract = await init(channelName, userName);
+    res.render('homepage', {title: 'Patients', channel: channelName});
+});
+
+router.post('/updateAuthorization', cors(), async function(req, res) {
     try {
         let params = new URLSearchParams(url.parse(req.url).query);
         const operatorID = params.get('id');
@@ -33,27 +41,31 @@ router.post('/:userName-:channelName/updateAuthorization', cors(), async functio
         const newRight = params.get('new-right');
         await contract.submitTransaction('updateAuthorization', patientID, operatorID, authorizingID, newRight);
         console.log(`Authorizing ${authorizingID}`);
+        res.status(200);
         res.json({'success': true, 'data': ''});
 
     } catch (error) {
+        res.status(400);
         res.json({'success': false, data: `${error}`});
     };
 });
 
-router.get('/:userName-:channelName/getAllRecord', cors(), async function(req, res) {
+router.get('/getAllRecord', cors(), async function(req, res) {
     try {
         let params = new URLSearchParams(url.parse(req.url).query);
         const operatorID = params.get('id');
         const patientID = params.get('patient-id');
         const result = await contract.evaluateTransaction('getAllRecord', patientID, operatorID);
         console.log(`Got all record for ${patientID}`);
+        res.status(200);
         res.json({'success': true, 'data': JSON.parse(result.toString())});
     } catch (error) {
+        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     };
 })
 
-router.get('/:userName-:channelName/getRecordByID', cors(), async function(req, res) {
+router.get('/getRecordByID', cors(), async function(req, res) {
     try {
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('patient-id');
@@ -61,13 +73,15 @@ router.get('/:userName-:channelName/getRecordByID', cors(), async function(req, 
         const recordID = params.get('record-id');
         const result = await contract.evaluateTransaction('getRecordByID', patientID, operatorID, recordID);
         console.log(`Got record with recordID=${recordID}`);
+        res.status(200);
         res.json({'success': true, 'data': JSON.parse(result.toString())});
     } catch (error) {
+        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     };
 });
 
-router.post('/:userName-:channelName/createRecord', cors(), async function(req, res) {
+router.post('/createRecord', cors(), async function(req, res) {
     try {
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('patient-id');
@@ -75,13 +89,15 @@ router.post('/:userName-:channelName/createRecord', cors(), async function(req, 
         const recordData = params.get('record-data');
         const recordID = await contract.submitTransaction('createRecord', patientID, operatorID, recordData);
         console.log(`Created record with recordID=${recordID}`);
+        res.status(200);
         res.json({'success': true, 'data': recordID});
     } catch (error) {
+        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     }
 });
 
-router.post('/:userName-:channelName/updateRecord', cors(), async function(req, res) {
+router.post('/updateRecord', cors(), async function(req, res) {
     try {
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('patient-id');
@@ -90,8 +106,10 @@ router.post('/:userName-:channelName/updateRecord', cors(), async function(req, 
         const newRecordData = params.get('new-record-data');
         await contract.submitTransaction('updateRecordByID', patientID, operatorID, recordID, newRecordData);
         console.log(`Updated record with recordID=${recordID}`);
+        res.status(200);
         res.json({'success': true, 'data': ''});
     } catch (error) {
+        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     }
 });

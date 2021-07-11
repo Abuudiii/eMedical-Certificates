@@ -24,50 +24,61 @@ async function init(channelName, userName) {
     return gateway, contract
 }
 
-router.get('/:userName-:channelName/updatePersonalData', cors(), async function(req, res) {
+/* GET home page. */
+router.get('/', async function(req, res) {
+    const channelName = req.params.channelName;
+    const userName = req.params.userName;
+    gateway, contract = await init(channelName, userName);
+    res.render('homepage', {title: 'Patients', channel: channelName});
+});
+
+router.get('/updatePersonalData', cors(), async function(req, res) {
     try {
-        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
-        const newName = params.get('new-name');
-        const newAddress = params.get('new-address');
-        await contract.submitTransaction('updatePersonalData', req.params.userName, newName, newAddress);
+        const patientID = params.get('id');
+        const newName = params.get('newName');
+        const newAddress = params.get('mew-address');
+        await contract.submitTransaction('updatePersonalData', patientID, newName, newAddress);
         console.log(`Updated data for ${patientID}`);
+        res.status(200);
         res.json({'success': true, 'data': {}});
     } catch (error) {
+        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     };
 });
 
-router.get('/:userName-:channelName/getRecordByID', cors(), async function(req, res) {
+router.get('/getRecordByID', cors(), async function(req, res) {
     try {
-        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('id');
         const recordID = params.get('record-id');
-        const result = await contract.evaluateTransaction('getRecordByID', req.params.userName, patientID, recordID);
+        const result = await contract.evaluateTransaction('getRecordByID', patientID, patientID, recordID);
         console.log(`Got record with recordID=${recordID}`);
+        res.status(200);
         res.json({'success': true, 'data': JSON.parse(result.toString())});
     } catch (error) {
+        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     };
 });
 
-router.get('/:userName-:channelName/getAllRecord', cors(), async function(req, res) {
+router.get('/getAllRecord', cors(), async function(req, res) {
     try {
-        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const patientID = params.get('id');
         const result = await contract.evaluateTransaction('getAllRecord', patientID, patientID);
         console.log(`Got all record for ${patientID}`);
+        res.status(200);
         res.json({'success': true, 'data': JSON.parse(result.toString())});
     } catch (error) {
+        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     };
 });
 
-router.post('/:userName-:channelName/updateAuthorization', cors(), async function(req, res) {
+router.post('/updateAuthorization', cors(), async function(req, res) {
     try {
-        let gateway, contract = await init(req.params.channelName, req.params.userName);
         let params = new URLSearchParams(url.parse(req.url).query);
         const operatorID = params.get('id');
         const patientID = params.get('patient-id');
@@ -75,9 +86,11 @@ router.post('/:userName-:channelName/updateAuthorization', cors(), async functio
         const newRight = params.get('new-right');
         await contract.submitTransaction('updateAuthorization', patientID, operatorID, authorizingID, newRight);
         console.log(`Authorizing ${authorizingID}`);
+        res.status(200);
         res.json({'success': true, 'data': ''});
 
     } catch (error) {
+        res.status(400);
         res.json({'success': false, data: `${error}`});
     };
 });
