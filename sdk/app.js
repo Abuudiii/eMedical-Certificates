@@ -22,8 +22,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/patient/:userName-:channelName', patientRouter);
-app.use('/health-data-provider/:userName-:channelName', healthDataProviderRouter);
+app.use('/patient', patientRouter);
+app.use('/health-data-provider', healthDataProviderRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler

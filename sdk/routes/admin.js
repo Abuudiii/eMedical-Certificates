@@ -46,10 +46,8 @@ router.post('/createProfile', cors(), async function(req, res) {
         const address = params.get('address');
         await contract.submitTransaction('createProfile', patientID, name, birthDate, address);
         console.log(`Profile for ${patientID} has been created`);
-        res.status(200);
         res.json({'success': true, 'data': ''});
     } catch (error) {
-        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     };
 });
@@ -63,13 +61,11 @@ router.post('/registerUser', cors(), async function(req, res){
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         const userIdentity = await wallet.get(userName);
         if (userIdentity) {
-            res.status(200);
             res.json({'success': false, 'reason': `User ${userName} already exists in the wallet`});
         }
 
         const adminIdentity = await wallet.get('admin');
         if (!adminIdentity) {
-            res.status(200);
             res.json({'success': false, 'reason': `Missing admin user in the wallet`});
         }
 
@@ -98,15 +94,13 @@ router.post('/registerUser', cors(), async function(req, res){
         };
         await wallet.put(userName, x509Identity);
         console.log(`Registered and enrolled user ${userName}`);
-        res.status(200);
         res.json({'success': true, 'data': ''});
     } catch (error) {
-        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     }
 });
 
-router.port('/createChannel', cors(), async function(req, res){
+router.post('/createChannel', cors(), async function(req, res){
     try {
         let params = new URLSearchParams(url.parse(req.url).query);
         const channelName = params.get('channel-name');
@@ -115,7 +109,6 @@ router.port('/createChannel', cors(), async function(req, res){
         const adminIdentity = await wallet.get('admin');
         if (!adminIdentity) {
             console.log('Missing admin user in the wallet')
-            res.status(200);
             res.json({'success': false, 'reason': 'Missing admin user in the wallet'});
         }
 
@@ -150,10 +143,8 @@ router.port('/createChannel', cors(), async function(req, res){
 
         console.log('Transaction sent');
         const result = await client.createChannel(request);
-        res.status(200);
         res.json({'success': true, 'data': `${result}`});
     } catch (error) {
-        res.status(400);
         res.json({'success': false, 'data': `${error}`});
     };
 })
